@@ -38,3 +38,37 @@ void *coletar_madeira(void* ponteiro_id){
     }
     pthread_exit(NULL);
 }
+
+int main() {
+    pthread_t lenhadores[N_LENHADORES];
+
+    //incializar os semáforos 
+    sem_init(&mutex_madeira, 0, 1);
+
+    printf("Inicizalizando a coleta de recursos\n");
+
+    // criar threads para os lenhadores
+    for (int i = 0; i < N_LENHADORES; i++){
+        int* id = malloc(sizeof(int));
+        *id = i + 1;
+        if (pthread_create(&lenhadores[i], NULL, coletar_madeira, (void*)id) != 0){
+            printf("Erro ao criar a thread do lenhador");
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    // agurda a finalização das threads dos lenhadores
+    for (int i = 0; i < N_LENHADORES; i++){
+        pthread_join(lenhadores[i], NULL);
+    }
+
+    // destroindo semaáforos após o uso
+    sem_destroy(&mutex_madeira);
+
+    // resultados
+    printf("\n Coleta Finalizada!\n");
+    printf("Total de madeira: %i\n", madeira);
+    printf("Total esperado de madeira na coleta: %i\n", N_LENHADORES * COLETA_TRABALHADOR);
+
+    return 0;
+}
