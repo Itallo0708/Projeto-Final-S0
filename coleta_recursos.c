@@ -18,7 +18,7 @@ sem_t mutex_pedra;
 #define COLETA_TRABALHADOR 10
 
 //função para coletar madeira
-void *coleta_madeira(void* ponteiro_id){
+void *coletar_madeira(void* ponteiro_id){
     // recebe a id do lenhador
     int id = *((int*)ponteiro_id);
     free(ponteiro_id);
